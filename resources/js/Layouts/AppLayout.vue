@@ -159,6 +159,18 @@
                         <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </jet-responsive-nav-link>
+
+                                  <jet-responsive-nav-link :href="route('AttendIndex')" :active="route().current('AttendIndex')">
+                            수강목록
+                        </jet-responsive-nav-link>
+
+                                  <jet-responsive-nav-link :href="route('Index')" :active="route().current('Index')">
+                            과목목록
+                        </jet-responsive-nav-link>
+
+                                  <jet-responsive-nav-link :href="route('add')" :active="route().current('add')">
+                            과목등록
+                        </jet-responsive-nav-link>
                     </div>
 
                     <!-- Responsive Settings Options -->
