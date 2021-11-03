@@ -46,33 +46,9 @@ class SubjectsController extends Controller
             DB::raw('subjects.id, subjects.subjectName,
             subjects.description, subjects.grade,
             subjects.created_at,subjects.updated_at'),
-        )->orderBy('subjects.id', 'asc')->paginate(3);
+        )->orderBy('subjects.id', 'asc')->paginate(6);
         
-        $attendsCount = DB::table('attends')
-        ->join('subjects', 'subjects.id', '=', 'attends.subject_id')
-        ->select(
-            DB::raw('attends.id','COUNT(attends.id) as count')
-        )->groupBy('subjects.id')->orderBy('attends.id', 'asc')
-        ->get();
-
-        $i = 0;
-        $flag = true;
-
-        foreach($subjects as $row) {
-            $flag = true;
-
-            for ($i = 0; $i < $attendsCount->count(); $i++) {
-                if ($row->id == $attendsCount[$i]->id) {
-                    $row->attends_count = $attendsCount[$i]->count;
-                    $flag = false;
-                    break;
-                }
-            }
-
-            if ($flag) {
-                $row->attends_count = null;
-            }
-        }
+    
         $res = response()->json([
             'status' => 'success',
             'subjects' => $subjects
@@ -142,9 +118,7 @@ class SubjectsController extends Controller
 
     public function edit(Request $req,$selected_id) {
         $subject = Subject::find($selected_id);
-
-
-            $validator = Validator::make($req->all(), [
+        $validator = Validator::make($req->all(), [
         'subjectName' => 'required|string',
             'description' => 'required|string',
             'grade' => 'required|integer'

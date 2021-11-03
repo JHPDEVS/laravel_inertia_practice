@@ -8,7 +8,7 @@
                 <marquee>This text will scroll from right to left</marquee>
                 학점 총합 : {{ totalItem }}
 
-                과목 개수 : {{ countItem }}
+                과목 개수 : {{ page.total }}
 
             </div>
             <div class="bg-white px-4 py-3   items-center justify-between border-t border-gray-200 sm:px-6 lg:flex">
@@ -58,7 +58,7 @@
                             class="text-center justify-center border-b border-black-200 hover:bg-gray-100">
                             <th><a v-bind:href="`/show/${attend.id}`">{{attend.subjectName}}</a></th>
                             <th>{{ attend.grade }}</th>
-                             <th>{{ subjectCount[i].count }}</th>
+                             <th>{{ attend.attends_count }}</th>
                         </tr>
                     </tbody>
                 </table>
@@ -85,7 +85,7 @@
                 showAttend: false,
                 searchQuery: '',
                 total: 1,
-                subjectCount: '',
+                subjectCount: [],
             }
         },
         components: {
@@ -93,14 +93,6 @@
 
         },
         computed: {
-            totalItem: function () {
-                let sum = 0;
-                this.attends.forEach(function (item) {
-                    sum += (parseInt(item.grade));
-                });
-
-                return sum;
-            },
 
             countItem: function () {
                 let sum = 0;
@@ -117,7 +109,6 @@
                     this.attends = response.data.attends.data;
                     this.pageLinks = response.data.attends.links
                     this.pageId = response.data.attends.current_page
-                    this.subjectCount = response.data.subjects;
                     this.page = response.data.attends
                 })
         },
@@ -142,7 +133,7 @@
                     .then(response => {
                         this.page = response.data.attends;
                         this.pageId = response.data.attends.current_page
-                        this.subjects = response.data.attends.data;
+                        this.attends = response.data.attends.data;
                         this.pageLinks = response.data.attends.links
                     })
             },

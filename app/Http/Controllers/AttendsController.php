@@ -50,21 +50,20 @@ class AttendsController extends Controller
         ], 200);
     }
     public function index() {
-        $attends =  Attend::withCount('subjects')
+        $attends =  Attend::withCount('subjects                                                                                                                                   ')
         ->join('subjects', 'subjects.id', '=', 'attends.subject_id')
         ->where('attends.user_id', '=', auth()->user()->id)
         ->select(
             DB::raw('attends.id, subjects.id,subjects.subjectName,
             subjects.description, subjects.grade'),
-        )->orderBy('attends.id', 'asc')->paginate(3);
+        )->orderBy('attends.id', 'asc')->paginate(5);
         
-        $subjects = DB::table('subjects')
-        ->join('attends', 'attends.subject_id', '=', 'subjects.id')
+        $subjects = DB::table('attends')
+        ->join('subjects', 'attends.subject_id', '=', 'subjects.id')
         ->select(
-            DB::raw('subjects.id, COUNT(attends.id) as count')
-        )->groupBy('attends.id')->orderBy('attends.created_at', 'asc')
-        ->get();
-        
+            DB::raw('subjects.id, subjects.subjectName , attends.user_id , COUNT(attends.id) as count')
+        )->groupBy('subjects.id')->orderBy('attends.id', 'asc')->get();
+
         $i = 0;
         $flag = true;
 
@@ -73,18 +72,16 @@ class AttendsController extends Controller
 
             for ($i = 0; $i < $subjects->count(); $i++) {
                 if ($row->id == $subjects[$i]->id) {
-                    $row->subjects = $subjects[$i]->count;
+                    $row->attends_count = $subjects[$i]->count;
                     $flag = false;
                     break;
                 }
             }
 
             if ($flag) {
-                $row->comments_count = null;
+                $row->attends_count = null;
             }
         }
-
-
         $res = response()->json([
             'status' => 'success',
             'attends' => $attends,
