@@ -50,13 +50,15 @@ class AttendsController extends Controller
         ], 200);
     }
     public function index() {
-        $attends =  Attend::withCount('subjects                                                                                                                                   ')
+
+        $attends = DB::table('attends')
         ->join('subjects', 'subjects.id', '=', 'attends.subject_id')
         ->where('attends.user_id', '=', auth()->user()->id)
         ->select(
             DB::raw('attends.id, subjects.id,subjects.subjectName,
             subjects.description, subjects.grade'),
         )->orderBy('attends.id', 'asc')->paginate(5);
+     
         
         $subjects = DB::table('attends')
         ->join('subjects', 'attends.subject_id', '=', 'subjects.id')
