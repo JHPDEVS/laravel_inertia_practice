@@ -93,4 +93,17 @@ class AttendsController extends Controller
         return $res;
       
     }
+
+    public function getAttendUser($subjectID) {
+        $attends = DB::table('attends')
+        ->join('users', 'users.id', '=', 'attends.user_id')
+        ->where('subject_id','=',$subjectID)
+        ->select(
+            DB::raw('users.id, users.name , users.email,users.profile_photo_path')
+        )->groupBy('users.id')->orderBy('users.id', 'asc')->get();
+
+
+
+        return inertia('Menu/AttendUsers',['attends'=>$attends]);
+    }
 }
