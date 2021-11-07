@@ -3,15 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subject;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class SubjectsController extends Controller
 {
     
-     // 자유 게시판 생성
+     // 과목  생성
      public function create(Request $req) {
+
+        if(!(Auth::user()->email === 'park@naver.com')) {
+            return response()->json([
+                'status' => 'abort',
+                'id' => Auth::user()->email,
+            ], 200);
+        }
+
         $validator = Validator::make($req->all(), [
             'title' => 'required|string',
             'content' => 'required|string',
@@ -48,7 +58,31 @@ class SubjectsController extends Controller
             subjects.created_at,subjects.updated_at'),
         )->orderBy('subjects.id', 'asc')->paginate(6);
         
-    
+        $subjectsCount = DB::table('attends')
+        ->join('subjects', 'attends.subject_id', '=', 'subjects.id')
+        ->select(
+            DB::raw('subjects.id, COUNT(attends.id) as count')
+        )->groupBy('subjects.id')->orderBy('attends.id', 'asc')->get();
+
+        $i = 0;
+        $flag = true;
+
+        foreach($subjects as $row) {
+            $flag = true;
+
+            for ($i = 0; $i < $subjectsCount->count(); $i++) {
+                if ($row->id == $subjectsCount[$i]->id) {
+                    $row->attends_count = $subjectsCount[$i]->count;
+                    $flag = false;
+                    break;
+                }
+            }
+
+            if ($flag) {
+                $row->attends_count = null;
+            }
+        }
+        
         $res = response()->json([
             'status' => 'success',
             'subjects' => $subjects
@@ -59,6 +93,7 @@ class SubjectsController extends Controller
       
     }
 
+   
     public function show($selected_subject_id) {
         $subjects = DB::table('subjects')
         ->where('subjects.id', '=', $selected_subject_id)

@@ -60,6 +60,7 @@
                         <tr class="hover:bg-grey-lighter">
                             <th>과목명</th>
                             <th>학점</th>
+                            <th v-if="$page.props.user.email === 'park@naver.com'">  <button @click="sort">수강자 수</button></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,6 +68,7 @@
                             class="text-center justify-center border-b border-black-200 hover:bg-gray-100">
                         <th><a v-bind:href="`/show/${subject.id}`">{{subject.subjectName}}</a></th>
                             <th>{{ subject.grade }}</th>
+                            <th v-if="$page.props.user.email === 'park@naver.com'" > <a v-bind:href="`/subject/attend/${subject.id}/detail`">{{subject.attends_count}}</a></th>
                         </tr>
                     </tbody>
                 </table>
@@ -109,6 +111,17 @@
           })
         },
         methods: {
+            sort() {
+                let vm = this;
+                this.subjects.sort(function (s1,s2) {
+                    if(vm.toggle) {
+                        return s1.attends_count - s2.attends_count;
+                    } else {
+                        return s2.attends_count - s1.attends_count;
+                    }
+                });
+                this.toggle = !this.toggle;
+            },
             refreshPage(page) {
                 if (page == "<") {
                     if (this.pageLinks[0].url) {
