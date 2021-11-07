@@ -15,8 +15,7 @@
                 </div>
                 <p class="text-gray-800 dark:text-gray-100 leading-snug md:leading-normal">학점 : {{ subject.grade }} 학점
                 </p>
-                <p class="text-gray-800 dark:text-gray-100 leading-snug md:leading-normal">과목 설명 : {{ subject.description }} 
-                </p>
+                <p v-html="subject.description" class="text-gray-800 dark:text-gray-100 leading-snug md:leading-normal"/>
 
                 <div class="flex justify-between items-center">
                     <div class="flex ">
@@ -28,10 +27,10 @@
                         <button
                         v-else
                             class="bg-red-500 hover:bg-blue-300 text-white font-semibold hover:text-white py-2 mx-1 px-2 border border-gray-600 hover:border-transparent rounded" @click="attend">수강취소</button>
-                        <button class="bg-blue-500 hover:bg-blue-300 text-white font-semibold hover:text-white py-2 mx-1 px-2 border border-gray-600 hover:border-transparent rounded"
+                        <button v-if="$page.props.user.email === 'park@naver.com'" class="bg-blue-500 hover:bg-blue-300 text-white font-semibold hover:text-white py-2 mx-1 px-2 border border-gray-600 hover:border-transparent rounded"
                             @click="editSubject">수정</button>
                         <button
-        
+        v-if="$page.props.user.email === 'park@naver.com'"
                             class="bg-red-500 hover:bg-red-300 text-white font-semibold hover:text-white py-2 mx-1 px-2 border border-gray-600 hover:border-transparent rounded" @click="openDelete">삭제</button>
                     </div>
 

@@ -9,8 +9,7 @@
                       <input class="title bg-gray-100 border border-gray-300 p-2 mb-2 outline-none" spellcheck="false"
                     placeholder="학점" type="text" v-model="subject.grade">
                     <span v-if="msg.grade" class="flex items-center font-medium tracking-wide text-red-500 text-xs  ml-1">{{ msg.grade }}</span>
-                <textarea class="description bg-gray-100 sec p-3 h-60 border border-gray-300 outline-none"
-                    spellcheck="false" placeholder="설명" v-model="subject.description"></textarea>
+              <ckeditor :editor="editor" v-model="subject.description" :config="editorConfig" />
                 <span v-if="msg.content" class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">{{ msg.content }}</span>
         
                 <div class="buttons flex">
@@ -32,17 +31,23 @@
     import AppLayout from '@/Layouts/AppLayout'
     import Dialog from '@/Jetstream/DialogModal'
     import axios from 'axios'
+    import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+    import CKEditor from '@ckeditor/ckeditor5-vue'
     export default {
         props: ['subject_id'],
         components: {
             AppLayout,
             Dialog,
+            ckeditor : CKEditor.component
         },
         data: () => ({
             subject: '',
             dialog: false,
             posts: [],
             msg: [],
+                  editor: ClassicEditor, 
+            editorData: '<p>Content of the editor.</p>', 
+            editorConfig: { height: '500px', language: 'ko' }
         }),
         computed: {
 
