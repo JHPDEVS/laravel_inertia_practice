@@ -31,7 +31,7 @@
                                     교과목 목록
                                 </jet-nav-link>
 
-                                    <jet-nav-link :href="route('add')" :active="route().current('add')">
+                                    <jet-nav-link v-if="$page.props.user.email === 'park@naver.com'" :href="route('add')" :active="route().current('add')">
                                     교과목 등록
                                 </jet-nav-link>
 
@@ -168,8 +168,8 @@
                             과목목록
                         </jet-responsive-nav-link>
 
-                                  <jet-responsive-nav-link :href="route('add')" :active="route().current('add')">
-                            과목등록
+                                  <jet-responsive-nav-link v-if="$page.props.user.email === 'park@naver.com'" :href="route('add')" :active="route().current('add')">
+                            과목등록 
                         </jet-responsive-nav-link>
                     </div>
 
