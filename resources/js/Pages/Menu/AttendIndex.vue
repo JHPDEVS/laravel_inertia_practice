@@ -5,8 +5,8 @@
         </template>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div>
-                <marquee>This text will scroll from right to left</marquee>
-                학점 총합 : {{ totalItem }}
+                <marquee>이번 학기는 {{ page.total }}개 과목을 수강하고 있습니다! </marquee>
+                학점 총합 : {{ allattend }}
 
                 과목 개수 : {{ page.total }}
 
@@ -58,7 +58,7 @@
                             class="text-center justify-center border-b border-black-200 hover:bg-gray-100">
                             <th><a v-bind:href="`/show/${attend.id}`">{{attend.subjectName}}</a></th>
                             <th>{{ attend.grade }}</th>
-                             <th>{{ attend.attends_count }}</th>
+                             <th><a v-bind:href="`/subject/attend/${attend.id}/detail`">{{ attend.attends_count }}</a></th>
                         </tr>
                     </tbody>
                 </table>
@@ -106,6 +106,7 @@
         mounted() {
             axios.get('/attend/index?page' + this.pageId)
                 .then(response => {
+                    this.allattend = response.data.allgrade.count;
                     this.attends = response.data.attends.data;
                     this.pageLinks = response.data.attends.links
                     this.pageId = response.data.attends.current_page

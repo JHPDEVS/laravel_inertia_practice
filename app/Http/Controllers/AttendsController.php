@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attend;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -84,10 +85,18 @@ class AttendsController extends Controller
                 $row->attends_count = null;
             }
         }
+
+        $attendsAllGrade = DB::table('attends')
+        ->join('subjects', 'subjects.id', '=', 'attends.subject_id')
+        ->where('attends.user_id', '=', auth()->user()->id)
+        ->select(
+            DB::raw('sum(subjects.grade) as count'))
+        ->first();
         $res = response()->json([
             'status' => 'success',
             'attends' => $attends,
-            'subjects' => $subjects
+            'subjects' => $subjects,
+            'allgrade' => $attendsAllGrade
         ],200);
 
         return $res;
@@ -95,6 +104,10 @@ class AttendsController extends Controller
     }
 
     public function getAttendUser($subjectID) {
+
+        if(!(Auth::user()->email === 'park@naver.com')) {
+            abort(403);
+        }
         $attends = DB::table('attends')
         ->join('users', 'users.id', '=', 'attends.user_id')
         ->where('subject_id','=',$subjectID)

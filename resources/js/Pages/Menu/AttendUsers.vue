@@ -15,8 +15,8 @@
       </thead>
       <tbody>
         <tr class="hover:bg-grey-lighter" v-for="(attend,i) in attends" v-bind:key="i">
-          <td class="py-4 px-6 border-b border-grey-light"><img v-if="attend.profile_photo_path" class="rounded-full" :src="`/storage/${attend.profile_photo_path}`"  />
-          <img v-else class="rounded-full"  :src="`https://ui-avatars.com/api/?name=${attend.name}&color=7F9CF5&background=EBF4FF`"/> </td>
+          <td class="py-4 px-6 border-b border-grey-light"><img v-if="attend.profile_photo_path" class="object-cover h-20 w-20 rounded-full" :src="`/storage/${attend.profile_photo_path}`"  />
+          <img v-else class="object-cover h-20 w-20 rounded-full"  :src="`https://ui-avatars.com/api/?name=${attend.name}&color=7F9CF5&background=EBF4FF`"/> </td>
           <td class="py-4 px-6 border-b border-grey-light">{{attend.name}}</td>
           <td class="py-4 px-6 border-b border-grey-light">{{attend.email}}</td>
         </tr>
