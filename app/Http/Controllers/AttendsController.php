@@ -113,7 +113,7 @@ class AttendsController extends Controller
         ->where('subject_id','=',$subjectID)
         ->select(
             DB::raw('users.id, users.name , users.email,users.profile_photo_path')
-        )->groupBy('users.id')->orderBy('users.id', 'asc')->get();
+        )->groupBy('users.id')->orderBy('users.id', 'asc')->paginate(5);
 
 
 

@@ -56,13 +56,13 @@ class SubjectsController extends Controller
             DB::raw('subjects.id, subjects.subjectName,
             subjects.description, subjects.grade,
             subjects.created_at,subjects.updated_at'),
-        )->orderBy('subjects.id', 'asc')->paginate(6);
+        )->orderBy('subjects.id', 'desc')->paginate(6);
         
         $subjectsCount = DB::table('attends')
         ->join('subjects', 'attends.subject_id', '=', 'subjects.id')
         ->select(
             DB::raw('subjects.id, COUNT(attends.id) as count')
-        )->groupBy('subjects.id')->orderBy('attends.id', 'asc')->get();
+        )->groupBy('subjects.id')->orderBy('attends.id', 'desc')->get();
 
         $i = 0;
         $flag = true;
