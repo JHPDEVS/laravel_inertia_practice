@@ -3,6 +3,27 @@
         <template #header>
             수강 신청자 리스트
         </template>
+           <div class="bg-white px-4 py-3   items-center justify-between border-t border-gray-200 sm:px-6 lg:flex">
+                <div class="flex-1 flex items-center justify-between ">
+                    <div>
+                        <nav class="relative z-0  flex-nowrap rounded-md shadow-sm -space-x-px lg:inline-flex"
+                            aria-label="Pagination">
+                            <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
+                            <a v-for="(item,i) in pageLinks" v-bind:key="i">
+                                <button @click="refreshPage(item.label)" v-if="item.active==true"
+                                    class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{ item.label }}</button>
+                                <button @click="refreshPage(item.label)" v-else
+                                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-mediums">{{ item.label }}</button>
+                            </a>
+
+                        </nav>
+
+                    </div>
+
+                </div>
+                <div>
+                </div>
+            </div>
        <div class="w-2/3 mx-auto">
   <div class="bg-white shadow-md rounded my-6">
     <table class="text-left w-full border-collapse"> <!--Border collapse doesn't work on this site yet but it's available in newer tailwind versions -->
@@ -14,7 +35,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="hover:bg-grey-lighter" v-for="(attend,i) in attends" v-bind:key="i">
+        <tr class="hover:bg-grey-lighter" v-for="(attend,i) in attends.data" v-bind:key="i">
           <td class="py-4 px-6 border-b border-grey-light"><img v-if="attend.profile_photo_path" class="object-cover h-20 w-20 rounded-full" :src="`/storage/${attend.profile_photo_path}`"  />
           <img v-else class="object-cover h-20 w-20 rounded-full"  :src="`https://ui-avatars.com/api/?name=${attend.name}&color=7F9CF5&background=EBF4FF`"/> </td>
           <td class="py-4 px-6 border-b border-grey-light">{{attend.name}}</td>
@@ -38,7 +59,7 @@
                 header2: '',
                 msg: '',
                 page: [],
-                pageLinks: [],
+                pageLinks: this.$page.props.attends.links,
                 pageId: '',
                 attends: [],
                 isLoading: 0,
@@ -52,17 +73,7 @@
             AppLayout,
 
         },
-        computed: {
-
-            countItem: function () {
-                let sum = 0;
-                this.attends.forEach(function (item) {
-                    sum +=1;
-                });
-
-                return sum;
-            }
-        },
+  
         mounted() {
        
         },
